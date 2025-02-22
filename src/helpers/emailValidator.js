@@ -4,3 +4,4 @@ export function emailValidator(email) {
   if (!re.test(email)) return 'Ooops! We need a valid email address.'
   return ''
 }
+
