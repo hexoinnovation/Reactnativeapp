@@ -8,10 +8,10 @@ export default function Dashboard() {
   return (
     <View style={styles.container}>
       {/* Navbar (Header) */}
-      <View style={styles.navbar}>
-        <Button title="☰ Menu" onPress={() => navigation.openDrawer()} />
-        <Text style={styles.title}>Dashboard</Text>
-      </View>
+      {/* <View style={styles.navbar}> */}
+        {/* <Button title="☰ Menu" onPress={() => navigation.openDrawer()} /> */}
+       
+      {/* </View> */}
 
       {/* Main Content */}
       <View style={styles.content}>
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: 60,
-    backgroundColor: '#6200ee',
     paddingHorizontal: 15,
   },
   title: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
