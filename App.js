@@ -1,25 +1,18 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { Provider, Text } from 'react-native-paper';
-import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { theme } from './src/core/theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import Screens
-import {
-  StartScreen,
-  LoginScreen,
-  RegisterScreen,
-  ResetPasswordScreen,
-  Dashboard
-} from './src/screens';
+import Dashboard from './src/screens/Dashboard';
+import ProfileScreen from './src/screens/ProfileScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 
 // Create Navigators
-const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
 
 // ✅ Custom Header with Menu Button
 const CustomHeader = ({ navigation, title }) => (
@@ -39,8 +32,8 @@ const CustomHeader = ({ navigation, title }) => (
   </View>
 );
 
-// ✅ Stack Navigator for Dashboard (With Custom Navbar)
-function DashboardStack({ navigation }) {
+// ✅ Stack Navigator for Home/Dashboard
+function HomeStack({ navigation }) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -52,33 +45,22 @@ function DashboardStack({ navigation }) {
   );
 }
 
-// ✅ Main App Navigator
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+// ✅ Main Drawer Navigation
+function DrawerNavigator() {
   return (
-    <Provider theme={theme}>
-      <NavigationContainer>
-        {isLoggedIn ? (
-          <Drawer.Navigator
-            initialRouteName="Dashboard"
-            screenOptions={{ headerShown: false }}  // ✅ Fix: Hide default header
-          >
-            <Drawer.Screen name="Dashboard" component={DashboardStack} />
-          </Drawer.Navigator>
-        ) : (
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="LoginScreen">
-              {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
-            </Stack.Screen>
-            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-            <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
-          </Stack.Navigator>
-        )}
-      </NavigationContainer>
-    </Provider>
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={HomeStack} />
+      <Drawer.Screen name="Profile" component={ProfileScreen} />
+      <Drawer.Screen name="Settings" component={SettingsScreen} />
+    </Drawer.Navigator>
   );
-};
+}
 
-// ✅ Wrap with gestureHandlerRootHOC for Web
-export default gestureHandlerRootHOC(App);
+// ✅ Main App
+export default function App() {
+  return (
+    <NavigationContainer>
+      <DrawerNavigator />
+    </NavigationContainer>
+  );
+}
