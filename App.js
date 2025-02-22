@@ -3,7 +3,7 @@ import { Provider } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler'; 
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { Platform } from 'react-native';
 import { theme } from './src/core/theme';
 
@@ -38,7 +38,7 @@ function DashboardStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#6200ee' }, 
+        headerStyle: { backgroundColor: '#6200ee' },
         headerTintColor: '#fff',
         headerTitleStyle: { fontSize: 18 }
       }}
