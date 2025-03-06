@@ -1,50 +1,56 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-paper'
-import Background from '../components/Background'
-import Logo from '../components/Logo'
-import Header from '../components/Header'
-import Button from '../components/Button'
-import TextInput from '../components/TextInput'
-import BackButton from '../components/BackButton'
-import { theme } from '../core/theme'
-import { emailValidator } from '../helpers/emailValidator'
-import { passwordValidator } from '../helpers/passwordValidator'
+import React, { useState } from 'react';
+import { TouchableOpacity, StyleSheet, View, Alert } from 'react-native';
+import { Text } from 'react-native-paper';
+import Background from '../components/Background';
+import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Button from '../components/Button';
+import TextInput from '../components/TextInput';
+import BackButton from '../components/BackButton';
+import { theme } from '../core/theme';
+import { emailValidator } from '../helpers/emailValidator';
+import { passwordValidator } from '../helpers/passwordValidator';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase"; // Ensure you import the Firebase auth instance
-import { Alert } from "react-native";
-export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+
+export default function LoginScreen({ navigation, setIsLoggedIn }) {
+  const [email, setEmail] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
 
   const onLoginPressed = async () => {
     const emailError = emailValidator(email.value);
     const passwordError = passwordValidator(password.value);
-  
+
     if (emailError || passwordError) {
       setEmail({ ...email, error: emailError });
       setPassword({ ...password, error: passwordError });
       return;
     }
-  
+
     try {
-      // Sign in user
       await signInWithEmailAndPassword(auth, email.value, password.value);
       
-      // Show success message
-      Alert.alert("Success", "Login successful!", [
-        { text: "OK", onPress: () => navigation.reset({ index: 0, routes: [{ name: 'Dashboard' }] }) }
-      ]);
+      // ✅ Update isLoggedIn state
+      setIsLoggedIn(true);
+
+      // ✅ Navigate to Dashboard
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Dashboard' }]
+      });
+
+      console.log("Success: Login successful! Navigating to Dashboard...");
     } catch (error) {
       if (error.code === "auth/user-not-found") {
-        Alert.alert("Error", "User not found. Please sign up.");
+        Alert.alert("Login Error", "User not found. Please sign up.");
       } else if (error.code === "auth/wrong-password") {
-        Alert.alert("Error", "Incorrect password. Please try again.");
+        Alert.alert("Login Error", "Incorrect password. Please try again.");
       } else {
-        Alert.alert("Error", error.message);
+        Alert.alert("Login Error", error.message);
       }
     }
   };
+
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
@@ -88,7 +94,7 @@ export default function LoginScreen({ navigation }) {
         </TouchableOpacity>
       </View>
     </Background>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -109,4 +115,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
-})
+});

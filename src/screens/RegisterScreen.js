@@ -45,11 +45,12 @@ export default function RegisterScreen({ navigation }) {
       });
 
       // Show success message
-      Alert.alert("Success", "Account created successfully! Please Login", [
+      console.log
+      ("Success", "Account created successfully! Please Login", [
         { text: "OK", onPress: () => navigation.reset({ index: 0, routes: [{ name: 'LoginScreen' }] }) }
       ]);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.error("Error", error.message);
     }
   };
 

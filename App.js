@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Provider } from 'react-native-paper';
+import { View, TouchableOpacity } from 'react-native';
+import { Provider, Text } from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler'; 
-import { Platform } from 'react-native';
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { theme } from './src/core/theme';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import Screens
 import {
@@ -20,30 +21,33 @@ import {
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
-// ✅ Stack Navigator for Authentication (Login/Register)
-function AuthStack({ setIsLoggedIn }) {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="LoginScreen">
-        {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
-      </Stack.Screen>
-      <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-      <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
-    </Stack.Navigator>
-  );
-}
+// ✅ Custom Header with Menu Button
+const CustomHeader = ({ navigation, title }) => (
+  <View
+    style={{
+      flexDirection: 'row',
+      alignItems: 'center',
+      height: 60,
+      backgroundColor: '#6200ee',
+      paddingHorizontal: 15,
+    }}
+  >
+    <TouchableOpacity onPress={() => navigation.openDrawer()} style={{ marginRight: 15 }}>
+      <Icon name="menu" size={30} color="white" />
+    </TouchableOpacity>
+    <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>{title}</Text>
+  </View>
+);
 
-// ✅ Stack Navigator for Dashboard (With Header)
-function DashboardStack() {
+// ✅ Stack Navigator for Dashboard (With Custom Navbar)
+function DashboardStack({ navigation }) {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: '#6200ee' }, 
-        headerTintColor: '#fff',
-        headerTitleStyle: { fontSize: 18 }
+        header: () => <CustomHeader navigation={navigation} title="Dashboard" />,
       }}
     >
-      <Stack.Screen name="Dashboard" component={Dashboard} options={{ title: 'Dashboard' }} />
+      <Stack.Screen name="Dashboard" component={Dashboard} />
     </Stack.Navigator>
   );
 }
@@ -56,11 +60,20 @@ const App = () => {
     <Provider theme={theme}>
       <NavigationContainer>
         {isLoggedIn ? (
-          <Drawer.Navigator initialRouteName="Dashboard">
+          <Drawer.Navigator
+            initialRouteName="Dashboard"
+            screenOptions={{ headerShown: false }}  // ✅ Fix: Hide default header
+          >
             <Drawer.Screen name="Dashboard" component={DashboardStack} />
           </Drawer.Navigator>
         ) : (
-          <AuthStack setIsLoggedIn={setIsLoggedIn} />
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="LoginScreen">
+              {(props) => <LoginScreen {...props} setIsLoggedIn={setIsLoggedIn} />}
+            </Stack.Screen>
+            <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+            <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />
+          </Stack.Navigator>
         )}
       </NavigationContainer>
     </Provider>
@@ -68,4 +81,4 @@ const App = () => {
 };
 
 // ✅ Wrap with gestureHandlerRootHOC for Web
-export default Platform.OS === 'web' ? gestureHandlerRootHOC(App) : App;
+export default gestureHandlerRootHOC(App);
