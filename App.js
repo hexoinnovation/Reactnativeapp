@@ -9,13 +9,22 @@ import { theme } from './src/core/theme';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Import Screens
-import {
-  StartScreen,
-  LoginScreen,
-  RegisterScreen,
-  ResetPasswordScreen,
-  Dashboard
-} from './src/screens';
+import StartScreen from './src/screens/StartScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
+import ResetPasswordScreen from './src/screens/ResetPasswordScreen';
+import Dashboard from './src/screens/Dashboard';
+import Purchase from './src/screens/Purchase';
+import Stock from './src/screens/Stock';
+import Sales from './src/screens/Sales';
+import EndProduct from './src/screens/EndProduct';
+import Invoice from './src/screens/Invoice';
+import AllInvoices from './src/screens/AllInvoices';
+import CustomerDetails from './src/screens/CustomerDetails';
+import BusinessDetails from './src/screens/BusinessDetails';
+import EmployeeDetails from './src/screens/EmployeeDetails';
+import Attendance from './src/screens/Attendance';
+import Salary from './src/screens/Salary';
 
 // Create Navigators
 const Stack = createStackNavigator();
@@ -39,20 +48,22 @@ const CustomHeader = ({ navigation, title }) => (
   </View>
 );
 
-// ✅ Stack Navigator for Dashboard (With Custom Navbar)
-function DashboardStack({ navigation }) {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        header: () => <CustomHeader navigation={navigation} title="Dashboard" />,
-      }}
-    >
-      <Stack.Screen name="Dashboard" component={Dashboard} />
-    </Stack.Navigator>
-  );
-}
+// ✅ Generic Stack Navigator (For Each Section)
+const createStack = (screenName, Component, title) => {
+  return function StackNavigator({ navigation }) {
+    return (
+      <Stack.Navigator
+        screenOptions={{
+          header: () => <CustomHeader navigation={navigation} title={title} />,
+        }}
+      >
+        <Stack.Screen name={screenName} component={Component} />
+      </Stack.Navigator>
+    );
+  };
+};
 
-// ✅ Main App Navigator
+// ✅ Sidebar Drawer Navigator
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -62,9 +73,20 @@ const App = () => {
         {isLoggedIn ? (
           <Drawer.Navigator
             initialRouteName="Dashboard"
-            screenOptions={{ headerShown: false }}  // ✅ Fix: Hide default header
+            screenOptions={{ headerShown: false }}
           >
-            <Drawer.Screen name="Dashboard" component={DashboardStack} />
+            <Drawer.Screen name="Dashboard" component={createStack("Dashboard", Dashboard, "Dashboard")} />
+            <Drawer.Screen name="Purchase" component={createStack("Purchase", Purchase, "Purchase")} />
+            <Drawer.Screen name="Stock" component={createStack("Stock", Stock, "Stock")} />
+            <Drawer.Screen name="Sales" component={createStack("Sales", Sales, "Sales")} />
+            <Drawer.Screen name="End Product" component={createStack("EndProduct", EndProduct, "End Product")} />
+            <Drawer.Screen name="Invoice" component={createStack("Invoice", Invoice, "Invoice")} />
+            <Drawer.Screen name="All Invoices" component={createStack("AllInvoices", AllInvoices, "All Invoices")} />
+            <Drawer.Screen name="Customer Details" component={createStack("CustomerDetails", CustomerDetails, "Customer Details")} />
+            <Drawer.Screen name="Business Details" component={createStack("BusinessDetails", BusinessDetails, "Business Details")} />
+            <Drawer.Screen name="Employee Details" component={createStack("EmployeeDetails", EmployeeDetails, "Employee Details")} />
+            <Drawer.Screen name="Attendance" component={createStack("Attendance", Attendance, "Attendance")} />
+            <Drawer.Screen name="Salary" component={createStack("Salary", Salary, "Salary")} />
           </Drawer.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
