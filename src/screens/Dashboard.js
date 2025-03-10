@@ -1,16 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Dashboard() {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Welcome to the Dashboard (Home)!</Text>
+      {/* Main Content */}
+      <View style={styles.content}>
+       
+       
+      </View>
     </View>
   );
 }
 
-// ✅ Styles
+// ✅ Styles for Layout
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' },
-  text: { fontSize: 20, fontWeight: 'bold', color: '#333' },
+  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  content: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  text: { fontSize: 20, marginBottom: 10 },
 });
