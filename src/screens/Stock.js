@@ -41,7 +41,7 @@ const Stocks = () => {
       if (!user) return;
 
       try {
-        const userDocRef = doc(db, "admins", "saitraders@gmail.com");
+        const userDocRef = doc(db, "users", "nithya@gmail.com");
         const productsRef = collection(userDocRef, "Purchase");
         const productSnapshot = await getDocs(productsRef);
 
@@ -76,7 +76,7 @@ const Stocks = () => {
     if (!user) return;
 
     try {
-        const userDocRef = doc(db, "admins", "saitraders@gmail.com");
+        const userDocRef = doc(db, "users", "nithya@gmail.com");
         const productsRef = collection(userDocRef, "Purchase");
 
         let existingProduct = null;
@@ -133,7 +133,7 @@ const handleRemoveProduct = async (no) => {
     }
 
     try {
-        const userDocRef = doc(db, "admins", "saitraders@gmail.com");
+        const userDocRef = doc(db, "users", "nithya@gmail.com");
         const productRef = doc(userDocRef, "Stocks", no);
 
         const confirmDelete = window.confirm("Are you sure you want to delete this product?");
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#f0f4f8",
   },
-  
+
   header: {
     fontSize: 24,
     fontWeight: "bold",
