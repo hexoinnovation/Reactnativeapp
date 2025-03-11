@@ -15,10 +15,7 @@ import {  doc, collection, addDoc, setDoc, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 const Purchase = () => {
-  const [products, setProducts] = useState([
-    { no: "8108000", sname: "Surendar", phone: "8800997777", add: "Bangalore", pname: "Titanium metal scrap", estock: "150", price: "360" },
-    { no: "OEx005", sname: "Sattur", phone: "989898989", add: "Sattur", pname: "Tape", estock: "18", price: "100" },
-  ]);
+  const [products, setProducts] = useState([]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -39,10 +36,18 @@ const Purchase = () => {
   const handleAddProduct = async () => {
     try {
       const userEmail = "nithya@gmail.com"; // Replace with dynamic user email if needed
-      const userDocRef = doc(db, "users", userEmail);
-      const productsRef = collection(userDocRef, "Purchase");
+      const productId = newProduct.no; // Assuming "no" is your product ID (e.g., "1001")
+      
+      if (!productId) {
+        console.error("Error: Product ID is missing!");
+        return;
+      }
   
-      await addDoc(productsRef, newProduct);
+      // Reference to the specific document with a custom ID
+      const productDocRef = doc(db, "users", userEmail, "Purchase", productId);
+  
+      // Set document with the provided ID
+      await setDoc(productDocRef, newProduct);
   
       // Fetch the updated list from Firestore after adding
       fetchProducts(); 
@@ -50,6 +55,8 @@ const Purchase = () => {
       // Reset modal and form
       setModalVisible(false);
       setNewProduct({ no: "", sname: "", phone: "", add: "", pname: "", estock: "", price: "" });
+  
+      console.log(`Product added successfully with ID: ${productId}`);
     } catch (error) {
       console.error("Error adding product:", error);
     }
