@@ -187,45 +187,47 @@ const Purchase = () => {
 
     </View>
  {/* Filter Panel */}
-      <View style={styles.filterContainer}>
-        <Text style={styles.filterHeader}>Filters</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Search by Product Name"
-          value={searchQuery}
-          onChangeText={(text) => setSearchQuery(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Product Name"
-          value={filters.pname}
-          onChangeText={(text) => handleFilterChange("pname", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Categories"
-          value={filters.categories}
-          onChangeText={(text) => handleFilterChange("categories", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Estock"
-          value={filters.estock}
-          onChangeText={(text) => handleFilterChange("estock", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Cstock"
-          value={filters.cstock}
-          onChangeText={(text) => handleFilterChange("cstock", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Price"
-          value={filters.price}
-          onChangeText={(text) => handleFilterChange("price", text)}
-        />
-      </View>
+ <View style={styles.filterContainer}>
+  <Text style={styles.filterHeader}>Filters</Text>
+  <View style={styles.filtersGrid}>
+    <TextInput
+      style={styles.input}
+      placeholder="Search by Product Name"
+      value={searchQuery}
+      onChangeText={(text) => setSearchQuery(text)}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Filter by Product Name"
+      value={filters.pname}
+      onChangeText={(text) => handleFilterChange("pname", text)}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Filter by Categories"
+      value={filters.categories}
+      onChangeText={(text) => handleFilterChange("categories", text)}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Filter by Estock"
+      value={filters.estock}
+      onChangeText={(text) => handleFilterChange("estock", text)}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Filter by Cstock"
+      value={filters.cstock}
+      onChangeText={(text) => handleFilterChange("cstock", text)}
+    />
+    <TextInput
+      style={styles.input}
+      placeholder="Filter by Price"
+      value={filters.price}
+      onChangeText={(text) => handleFilterChange("price", text)}
+    />
+  </View>
+</View>
 
       {/* Scrollable Table */}
       <ScrollView horizontal={true} style={styles.scrollContainer}>
@@ -314,7 +316,8 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
   tableContainer: {
     marginTop:2,
-    minWidth: 800, // Ensures horizontal scrolling on small screens
+    minWidth: 1400,
+    marginLeft:20,
   },
   tableHeader: {
     marginTop:2,
@@ -347,7 +350,7 @@ const styles = StyleSheet.create({
     minWidth: 120, // Ensures space for buttons
   },
   addButton: { backgroundColor: "blue", padding: 10, borderRadius: 5, alignSelf: "center", marginTop: 10 },
-  addButtonText: { color: "white", fontSize: 16, fontWeight: "bold" },
+  addButtonText: { color: "white", fontSize: 16, fontWeight: "bold",  alignItems: "left" },
   modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
   modalContent: { width: 300, padding: 20, backgroundColor: "white", borderRadius: 10, alignItems: "center" },
   modalTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
@@ -392,14 +395,21 @@ const styles = StyleSheet.create({
   filterHeader: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 8,
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  filtersGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap", // Allows wrapping to the next row
+    justifyContent: "space-between",
   },
   input: {
+    width: "32%", // Adjust for 3 columns
+    padding: 10,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 4,
-    padding: 8,
-    marginBottom: 8,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   input: { width: "100%", borderWidth: 1, borderColor: "#ccc", padding: 10, marginBottom: 10, borderRadius: 5 },
 });
