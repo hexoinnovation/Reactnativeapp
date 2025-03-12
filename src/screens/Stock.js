@@ -3,15 +3,17 @@ import { View, Text, TextInput, ScrollView, StyleSheet, TouchableOpacity, FlatLi
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigation } from "@react-navigation/native";
 import { collection, deleteDoc, doc, getDocs, setDoc, getDoc } from "firebase/firestore";
-import { IconButton, Modal, Portal, Button } from "react-native-paper";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { IconButton, Modal, Portal, Button ,DataTable , Card,useTheme} from "react-native-paper";
 import { auth, db } from "../firebase";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+
 //import Swal from "sweetalert2";
 
 const Stocks = () => {
   const [showModal, setShowModal] = useState(false);
   const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const { colors } = useTheme(); 
   const [filters, setFilters] = useState({
     pname: "",
     categories: "",
@@ -194,62 +196,101 @@ const handleRemoveProduct = async (no) => {
           <Text style={styles.infoValue}>₹{totalPrice}</Text>
         </View>
       </View>
-
-      {/* Filter Panel */}
-      <View style={styles.filterContainer}>
+      <Card style={styles.card}>
+      <Card.Content>
+        {/* Filter Header */}
         <Text style={styles.filterHeader}>Filters</Text>
+
+        {/* Search Input (Full Width) */}
         <TextInput
-          style={styles.input}
+          mode="outlined"
           placeholder="Search by Product Name"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
+          left={<TextInput.Icon name="magnify" size={24} />} // Increased icon size
+          style={styles.fullWidthInput}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Product Name"
-          value={filters.pname}
-          onChangeText={(text) => handleFilterChange("pname", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Categories"
-          value={filters.categories}
-          onChangeText={(text) => handleFilterChange("categories", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Estock"
-          value={filters.estock}
-          onChangeText={(text) => handleFilterChange("estock", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Cstock"
-          value={filters.cstock}
-          onChangeText={(text) => handleFilterChange("cstock", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Filter by Price"
-          value={filters.price}
-          onChangeText={(text) => handleFilterChange("price", text)}
-        />
-      </View>
 
-      {/* Product List */}
-      <FlatList
-        data={filteredProducts}
-        keyExtractor={(item) => item.no}
-        renderItem={({ item }) => (
-          <View style={styles.productItem}>
-            <Text style={styles.productText}>P.No: {item.no}</Text>
-            <Text style={styles.productText}>Product Name: {item.pname}</Text>
-            <Text style={styles.productText}>Existing Stock: {item.estock}</Text>
-            <Text style={styles.productText}>Current Stock: {item.cstock}</Text>
-            <Text style={styles.productText}>Price: ₹{item.price}</Text>
+        {/* Filter Inputs (3 Rows & 2 Columns) */}
+        <View style={styles.row}>
+          <TextInput
+            mode="outlined"
+            placeholder=" Filter by Product Name"
+            value={filters.pname}
+            onChangeText={(text) => handleFilterChange("pname", text)}
+            left={<TextInput.Icon name="tag" size={24} />} // Increased icon size
+            style={styles.input}
+          />
+          <TextInput
+            mode="outlined"
+            placeholder=" Filter by Categories"
+            value={filters.categories}
+            onChangeText={(text) => handleFilterChange("categories", text)}
+            left={<TextInput.Icon name="shape" size={24} />}
+            style={styles.input}
+          />
+        </View>
+
+        <View style={styles.row}>
+          <TextInput
+            mode="outlined"
+            placeholder="Filter by Estock"
+            value={filters.estock}
+            onChangeText={(text) => handleFilterChange("estock", text)}
+            left={<TextInput.Icon name="warehouse" size={24} />}
+            style={styles.input}
+            keyboardType="numeric"
+          />
+          <TextInput
+            mode="outlined"
+            placeholder="Cstock"
+            value={filters.cstock}
+            onChangeText={(text) => handleFilterChange("cstock", text)}
+            left={<TextInput.Icon name="package-variant" size={24} />}
+            style={styles.input}
+            keyboardType="numeric"
+          />
+        </View>
+
+        <View style={styles.row}>
+          <TextInput
+            mode="outlined"
+            placeholder=" Filter by Price"
+            value={filters.price}
+            onChangeText={(text) => handleFilterChange("price", text)}
+            left={<TextInput.Icon name="currency-inr" size={24} />}
+            style={styles.input}
+            keyboardType="numeric"
+          />
+          {/* Empty Input for Alignment */}
+          <View style={[styles.input, { borderWidth: 0 }]} />
+        </View>
+      </Card.Content>
+    </Card>
+      <DataTable style={styles.table}>
+      {/* Table Header */}
+      <DataTable.Header style={styles.tableHeader}>
+        <DataTable.Title textStyle={styles.headerText}>P.No</DataTable.Title>
+        <DataTable.Title textStyle={styles.headerText}>Product Name</DataTable.Title>
+        <DataTable.Title numeric textStyle={styles.headerText}>Existing Stock</DataTable.Title>
+        <DataTable.Title numeric textStyle={styles.headerText}>Current Stock</DataTable.Title>
+        <DataTable.Title numeric textStyle={styles.headerText}>Price</DataTable.Title>
+        <DataTable.Title textStyle={styles.headerText}>Actions</DataTable.Title>
+      </DataTable.Header>
+
+      {/* Table Rows */}
+      {filteredProducts.map((item) => (
+        <DataTable.Row key={item.no} style={styles.tableRow}>
+          <DataTable.Cell>{item.no}</DataTable.Cell>
+          <DataTable.Cell>{item.pname}</DataTable.Cell>
+          <DataTable.Cell numeric>{item.estock}</DataTable.Cell>
+          <DataTable.Cell numeric>{item.cstock}</DataTable.Cell>
+          <DataTable.Cell numeric>₹{item.price}</DataTable.Cell>
+          <DataTable.Cell>
             <View style={styles.actions}>
               <IconButton
                 icon="pencil"
+                size={20}
                 onPress={() => {
                   setShowModal(true);
                   setNewStock(item);
@@ -257,64 +298,104 @@ const handleRemoveProduct = async (no) => {
               />
               <IconButton
                 icon="delete"
-                 onPress={() => handleRemoveProduct(item.no)}
+                size={20}
+                onPress={() => handleRemoveProduct(item.no)}
               />
             </View>
-          </View>
-        )}
-      />
+          </DataTable.Cell>
+        </DataTable.Row>
+      ))}
+    </DataTable>
+  
+    <Portal>
+      <Modal
+        visible={showModal}
+        onDismiss={() => setShowModal(false)}
+        contentContainerStyle={styles.modalContainer}
+      >
+        <Card style={styles.modalCard}>
+          <ScrollView contentContainerStyle={styles.scrollContent}>
+            <Card.Content>
+              {/* Modal Header */}
+              <Text style={styles.modalHeader}>Add/Update Product</Text>
 
-      {/* Add Product Modal */}
-      <Portal>
-        <Modal visible={showModal} onDismiss={() => setShowModal(false)}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalHeader}>Add/Update Product</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Product No"
-              value={newStock.no}
-              editable={false}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Product Name"
-              value={newStock.pname}
-              onChangeText={(text) => handleInputChange("pname", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Categories"
-              value={newStock.categories}
-              onChangeText={(text) => handleInputChange("categories", text)}
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Estock"
-              value={newStock.estock}
-              onChangeText={(text) => handleInputChange("estock", text)}
-              keyboardType="numeric"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Cstock"
-              value={newStock.cstock}
-              onChangeText={(text) => handleInputChange("cstock", text)}
-              keyboardType="numeric"
-            />
-            <TextInput
-              style={styles.input}
-              placeholder="Price"
-              value={newStock.price}
-              onChangeText={(text) => handleInputChange("price", text)}
-              keyboardType="numeric"
-            />
-            <Button mode="contained" onPress={handleFormSubmit}>
-              {newStock.no ? "Update Product" : "Add Product"}
-            </Button>
-            <Button onPress={() => setShowModal(false)}>Cancel</Button>
-          </View>
-        </Modal>
-      </Portal>
+              {/* Product No */}
+              <TextInput
+                mode="outlined"
+                placeholder="Product No"
+                value={newStock.no}
+                editable={false}
+                style={styles.input}
+              />
+
+              {/* Product Name */}
+              <TextInput
+                mode="outlined"
+                placeholder="Product Name"
+                value={newStock.pname}
+                onChangeText={(text) => handleInputChange("pname", text)}
+                style={styles.input}
+              />
+
+              {/* Categories */}
+              <TextInput
+                mode="outlined"
+                placeholder="Categories"
+                value={newStock.categories}
+                onChangeText={(text) => handleInputChange("categories", text)}
+                style={styles.input}
+              />
+
+              {/* Estock */}
+              <TextInput
+                mode="outlined"
+                placeholder="Estock"
+                value={newStock.estock}
+                onChangeText={(text) => handleInputChange("estock", text)}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+
+              {/* Cstock */}
+              <TextInput
+                mode="outlined"
+                placeholder="Cstock"
+                value={newStock.cstock}
+                onChangeText={(text) => handleInputChange("cstock", text)}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+
+              {/* Price */}
+              <TextInput
+                mode="outlined"
+                placeholder="Price"
+                value={newStock.price}
+                onChangeText={(text) => handleInputChange("price", text)}
+                keyboardType="numeric"
+                style={styles.input}
+              />
+
+              {/* Buttons */}
+              <Button
+                mode="contained"
+                onPress={handleFormSubmit}
+                style={styles.submitButton}
+              >
+                {newStock.no ? "Update Product" : "Add Product"}
+              </Button>
+              <Button
+                mode="outlined"
+                onPress={() => setShowModal(false)}
+                style={styles.cancelButton}
+              >
+                Cancel
+              </Button>
+            </Card.Content>
+          </ScrollView>
+        </Card>
+      </Modal>
+    </Portal>
     </ScrollView>
   );
 };
@@ -385,16 +466,110 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
   },
-  modalContent: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 8,
-    margin: 16,
+  modalContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalCard: {
+    width: "90%", // Width of the modal
+    maxHeight: "100%", // Increased height
+    borderRadius: 16, // Curved edges
+    elevation: 4, // Shadow for Android
+    shadowColor: "#000", // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  scrollContent: {
+    padding: 16, // Padding inside the modal
   },
   modalHeader: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 16,
+    color: "#143f7d", // Dark blue color
+    textAlign: "center",
+  },
+  input: {
+    marginBottom: 12, // Spacing between inputs
+    backgroundColor: "#fff", // White background for inputs
+    height:50,
+  },
+  submitButton: {
+    marginTop: 8,
+    backgroundColor: "#143f7d", // Dark blue color
+  },
+  cancelButton: {
+    marginTop: 8,
+    borderColor: "#143f7d", // Dark blue border
+  },
+    table: {
+    margin: 16,
+    borderRadius: 8,
+    overflow: "hidden",
+    elevation: 4, // Shadow for Android
+    shadowColor: "#000", // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  tableHeader: {
+    backgroundColor: "#143f7d", // Dark blue header
+  },
+  headerText: {
+    color: "#fff", 
+    fontWeight: "bold", 
+    fontSize:18,
+  },
+  tableRow: {
+    backgroundColor: "#fff", // White rows
+  },
+  tableRow: {
+    backgroundColor: "#fff", // White rows
+  },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  card: {
+    margin: 16,
+    
+    width:"100%",
+    borderRadius: 16, // Curved edges for the card
+    elevation: 6, // More shadow for Android
+    shadowColor: "#000", // Shadow for iOS
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    backgroundColor: "#fff", // White background
+    padding: 16, // Padding inside the card
+  },
+  filterHeader: {
+    fontSize: 20, // Slightly bigger text
+    fontWeight: "bold",
+    marginBottom: 16,
+    color: "#143f7d", // Dark blue color
+    textAlign: "center", // Centered header
+  },
+  fullWidthInput: {
+    marginBottom: 12,
+    borderRadius: 8, // Rounded edges
+    height: 50, // Slightly taller input
+    width:"100%",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  input: {
+    flex: 1, // Equal width for both inputs
+    marginHorizontal: 6, // Spacing between inputs
+    borderRadius: 10, // More rounded edges
+    height: 50, // Increased height
+    borderColor:"#143f7d",
+    borderWidth:2,
+   
   },
 });
 
