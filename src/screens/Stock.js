@@ -204,7 +204,7 @@ const handleRemoveProduct = async (no) => {
         {/* Search Input (Full Width) */}
         <TextInput
           mode="outlined"
-          placeholder="Search by Product Name"
+          placeholder=" Search by Product Name"
           value={searchQuery}
           onChangeText={(text) => setSearchQuery(text)}
           left={<TextInput.Icon name="magnify" size={24} />} // Increased icon size
@@ -234,7 +234,7 @@ const handleRemoveProduct = async (no) => {
         <View style={styles.row}>
           <TextInput
             mode="outlined"
-            placeholder="Filter by Estock"
+            placeholder=" Filter by Estock"
             value={filters.estock}
             onChangeText={(text) => handleFilterChange("estock", text)}
             left={<TextInput.Icon name="warehouse" size={24} />}
@@ -243,7 +243,7 @@ const handleRemoveProduct = async (no) => {
           />
           <TextInput
             mode="outlined"
-            placeholder="Cstock"
+            placeholder=" Cstock"
             value={filters.cstock}
             onChangeText={(text) => handleFilterChange("cstock", text)}
             left={<TextInput.Icon name="package-variant" size={24} />}
@@ -286,6 +286,7 @@ const handleRemoveProduct = async (no) => {
           <DataTable.Cell numeric>{item.estock}</DataTable.Cell>
           <DataTable.Cell numeric>{item.cstock}</DataTable.Cell>
           <DataTable.Cell numeric>₹{item.price}</DataTable.Cell>
+        
           <DataTable.Cell>
             <View style={styles.actions}>
               <IconButton
@@ -325,27 +326,27 @@ const handleRemoveProduct = async (no) => {
                 placeholder="Product No"
                 value={newStock.no}
                 editable={false}
-                style={styles.input}
+                style={styles.inputt}
               />
-
+<br></br>
               {/* Product Name */}
               <TextInput
                 mode="outlined"
                 placeholder="Product Name"
                 value={newStock.pname}
                 onChangeText={(text) => handleInputChange("pname", text)}
-                style={styles.input}
+                style={styles.inputt}
               />
-
+<br></br>
               {/* Categories */}
               <TextInput
                 mode="outlined"
                 placeholder="Categories"
                 value={newStock.categories}
                 onChangeText={(text) => handleInputChange("categories", text)}
-                style={styles.input}
+                style={styles.inputt}
               />
-
+<br></br>
               {/* Estock */}
               <TextInput
                 mode="outlined"
@@ -353,9 +354,9 @@ const handleRemoveProduct = async (no) => {
                 value={newStock.estock}
                 onChangeText={(text) => handleInputChange("estock", text)}
                 keyboardType="numeric"
-                style={styles.input}
+                style={styles.inputt}
               />
-
+<br></br>
               {/* Cstock */}
               <TextInput
                 mode="outlined"
@@ -363,9 +364,9 @@ const handleRemoveProduct = async (no) => {
                 value={newStock.cstock}
                 onChangeText={(text) => handleInputChange("cstock", text)}
                 keyboardType="numeric"
-                style={styles.input}
+                style={styles.inputt}
               />
-
+<br></br>
               {/* Price */}
               <TextInput
                 mode="outlined"
@@ -373,9 +374,9 @@ const handleRemoveProduct = async (no) => {
                 value={newStock.price}
                 onChangeText={(text) => handleInputChange("price", text)}
                 keyboardType="numeric"
-                style={styles.input}
+                style={styles.inputt}
               />
-
+<br></br>
               {/* Buttons */}
               <Button
                 mode="contained"
@@ -465,10 +466,13 @@ const styles = StyleSheet.create({
   actions: {
     flexDirection: "row",
     justifyContent: "flex-end",
+   
   },
   modalContainer: {
     justifyContent: "center",
     alignItems: "center",
+
+    
   },
   modalCard: {
     width: "90%", // Width of the modal
@@ -479,6 +483,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
+   
   },
   scrollContent: {
     padding: 16, // Padding inside the modal
@@ -489,12 +494,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#143f7d", // Dark blue color
     textAlign: "center",
+    
   },
-  input: {
-    marginBottom: 12, // Spacing between inputs
-    backgroundColor: "#fff", // White background for inputs
-    height:50,
-  },
+ 
   submitButton: {
     marginTop: 8,
     backgroundColor: "#143f7d", // Dark blue color
@@ -503,33 +505,37 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderColor: "#143f7d", // Dark blue border
   },
-    table: {
-    margin: 16,
+  table: {
+    width: "100%",
+    backgroundColor: "#fff",
     borderRadius: 8,
     overflow: "hidden",
-    elevation: 4, // Shadow for Android
-    shadowColor: "#000", // Shadow for iOS
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    elevation: 3, // Adds shadow for better UI
   },
   tableHeader: {
-    backgroundColor: "#143f7d", // Dark blue header
+    backgroundColor: "#143f7d",
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
   headerText: {
-    color: "#fff", 
-    fontWeight: "bold", 
-    fontSize:18,
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   tableRow: {
-    backgroundColor: "#fff", // White rows
-  },
-  tableRow: {
-    backgroundColor: "#fff", // White rows
+    backgroundColor: "#f8f9fa", // Light grey background for contrast
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    height: 50,
   },
   actions: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  iconButton: {
+    marginHorizontal: 5,
   },
   card: {
     margin: 16,
@@ -552,10 +558,17 @@ const styles = StyleSheet.create({
     textAlign: "center", // Centered header
   },
   fullWidthInput: {
-    marginBottom: 12,
-    borderRadius: 8, // Rounded edges
-    height: 50, // Slightly taller input
-    width:"100%",
+    width: "100%",
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    marginBottom: 10,
+    marginLeft:4,
+    
   },
   row: {
     flexDirection: "row",
@@ -563,13 +576,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    flex: 1, // Equal width for both inputs
-    marginHorizontal: 6, // Spacing between inputs
-    borderRadius: 10, // More rounded edges
-    height: 50, // Increased height
-    borderColor:"#143f7d",
+    flex: 2, 
+    marginHorizontal: 10, 
+    borderRadius: 6, 
+    height: 50, 
+    borderColor: "#ccc",
     borderWidth:2,
    
+  },
+  inputt: {
+    width: "100%",
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    marginBottom: 10,
   },
 });
 
